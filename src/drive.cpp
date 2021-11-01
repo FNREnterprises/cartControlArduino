@@ -664,7 +664,8 @@ void stopCart(bool moveDone, String reason) {
 		// - current orientation
 		// - distance travelled (based on odometer)
 		// - reason for stop
-		if (activeCartMovement == ROTATE_CLOCKWISE || activeCartMovement == ROTATE_COUNTERCLOCK) {
+
+		if (moveType == ROTATE) {
 			Serial.println((String)"!S4,"
 				+ int(platformImu.getYaw())
 				+ "," + reason);
@@ -759,6 +760,13 @@ void handleMove(bool newSensorValuesAvailable) {
 			prt(", distance moved: ");	pr(sumDonePartialDistances + partialMoveDistance);
 			prt(", imuYawEnd: "); pr(platformImu.getYaw());
 			prl();
+
+			// send update of final position
+			Serial.print("!P1,");
+			Serial.print(int(platformImu.getYaw()));
+			Serial.print(",");	Serial.print(sumDonePartialDistances + partialMoveDistance);
+			Serial.println();
+
 			return;
 		}
 	}
@@ -771,6 +779,11 @@ void handleMove(bool newSensorValuesAvailable) {
 			prt(", angle rotated: ");	pr(sumDonePartialRotateAngles + partialRotateAngle);
 			prt(", imuYawEnd: "); pr(platformImu.getYaw());
 			prl();
+
+			// send update for final yaw
+			Serial.print("!P2,");
+			Serial.print(int(platformImu.getYaw()));
+
 			return;
 		}
 	}
@@ -1023,11 +1036,16 @@ void handleCartMovement() {
 		if ((millis() - lastPositionSentMillis > 200) && (activeCartMovement != STOP)) {
 		
 			lastPositionSentMillis = millis();
-			//Serial.println();		// make sure it's a new line
-			Serial.print("!P1,");
-			Serial.print(int(platformImu.getYaw()));
-			Serial.print(",");	Serial.print(sumDonePartialDistances + partialMoveDistance);
-			//Serial.print(",");	Serial.print(activeCartMovement);
+			
+			// send P1 for distance, P2 for rotation update
+			if (moveType == STRAIGHT) {
+				Serial.print("!P1,");
+				Serial.print(int(platformImu.getYaw()));
+				Serial.print(",");	Serial.print(sumDonePartialDistances + partialMoveDistance);
+			} else {
+				Serial.print("!P2,");
+				Serial.print(int(platformImu.getYaw()));
+			}
 			Serial.println();
 		}
 	}
