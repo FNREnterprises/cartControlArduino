@@ -1,6 +1,6 @@
 
 
-char version[10] = "v2.5";
+char version[10] = "v2.6";
 
 // 
 // 
