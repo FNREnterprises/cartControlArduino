@@ -3,11 +3,12 @@
 
 extern bool verbose;
 
-bool Imu::setAddressAndName(byte thisAddress, String thisName, String thisId) {
+bool Imu::setAddressAndName(byte thisAddress, String thisName, String thisId, bool thisYawInverted) {
 
 	address = thisAddress;
 	name = thisName;
 	id = thisId;
+	yawInverted = thisYawInverted;
 
 	Serial.print(F("check i2c address 0x"));
 	Serial.print(address, HEX);
@@ -36,8 +37,15 @@ bool Imu::setAddressAndName(byte thisAddress, String thisName, String thisId) {
 	prevRoll = bnoData.orientation.z;	
 	return true;
 }
-
-float Imu::getYaw() { return yaw;  }
+// depends on mounting of the sensor, yaw might be inverted!!!
+float Imu::getYaw() { 
+	if (yawInverted) {
+		return 360-yaw;  
+	}
+	else {
+		return yaw;
+	}
+}
 float Imu::getRoll() { return roll; }
 float Imu::getPitch() { return pitch; }
 String Imu::getId() { return id; }

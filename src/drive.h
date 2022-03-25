@@ -27,7 +27,7 @@ extern int _speedUnifyer[MOTORS_COUNT];
 extern MOVE_TYPE moveType;
 
 // initialise move
-extern void setupFahren();
+extern void setupDriving();
 
 // driving direction
 extern void setPlannedCartMove(MOVEMENT, int, int, int, int, bool);

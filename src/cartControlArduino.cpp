@@ -1,6 +1,6 @@
 
 
-char version[10] = "v2.6";
+char version[10] = "v2.7";
 
 // 
 // 
@@ -175,7 +175,9 @@ void setup()
 	Serial.print(F(" MIN_MEASURE_CYCLE_DURATION: ")); Serial.println(MIN_MEASURE_CYCLE_DURATION);
 	Serial.print(F(" finalDockingMoveDistance: ")); Serial.println(finalDockingMoveDistance);
 
-	setupFahren();
+	loadFloorReferenceDistances();
+
+	setupDriving();
 
 	delay(500);
 	pinMode(CHARGE_6V_BATTERY_PIN, OUTPUT);
@@ -190,7 +192,7 @@ void setup()
 	tableSetup();
 
 	// the imu's
-	while (!platformImu.setAddressAndName(platformBnoAddress, "platformImu", "!I1")) {
+	while (!platformImu.setAddressAndName(platformBnoAddress, "platformImu", "!I1", true)) {
 		Serial.println(F("could not connect with platform imu"));
 		delay(100);
 	}
@@ -199,7 +201,7 @@ void setup()
 	for (int i=0; i<5; i++) {platformImu.getYaw();}
 	sendImuValues(platformImu);
 
-	while (!headImu.setAddressAndName(headBnoAddress, "headImu", "!I2")) {
+	while (!headImu.setAddressAndName(headBnoAddress, "headImu", "!I2", true)) {
 		Serial.println(F("could not connect with head imu"));
 		delay(100);
 	}
@@ -207,8 +209,6 @@ void setup()
 	// read a few times to get stable values
 	for (int i=0; i<5; i++) {platformImu.getYaw();}
 	sendImuValues(headImu);
-
-	loadFloorReferenceDistances();
 
 	initializeUltrasonicSensors();
 

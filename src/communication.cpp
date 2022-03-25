@@ -27,6 +27,7 @@ void sendImuValues(Imu imu) {
 	long milliRoll = imu.getRoll() * 1000;
 	long milliPitch = imu.getPitch() * 1000;
 
+	// imu.getId = !I1 for platform sensor, !I2 for head sensor
 	pr(imu.getId()); pr(","); pr(milliYaw); pr(","); pr(milliRoll); pr(","); pr(milliPitch); prl();
 
 	imu.setMillisLastPublished();

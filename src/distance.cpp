@@ -194,6 +194,28 @@ void setupSwipeServos(int dockingSwitch) {
 			Serial.print(F(", distMax: ")); Serial.print(distMax);
 			Serial.print(F(", range: ")); Serial.print(distMax-distMin);
 			Serial.println();
+
+			// set swipe step 5 distance (90 deg) to measured value
+			irSensorStepData[sensorId][5].distMm = distMm;
+
+			// report as FLOOR_OFFSET
+			int step = irSensorDefinitions[sensorId].swipe ? 5 : 0;
+			int refDist = irSensorReferenceDistances[sensorId][step];
+			int obstacleHeight = 0;
+			int abyssDepth = 0;
+			if (distMm < refDist) {
+				obstacleHeight = refDist - distMm;
+			}
+			else {
+				abyssDepth = distMm - refDist;
+			}
+
+			pr("!F1");
+			pr(","); pr(sensorId);
+			pr(","); pr(step);
+			pr(","); pr(obstacleHeight);
+			pr(","); pr(abyssDepth);
+			prl();
 		}
 	}
 

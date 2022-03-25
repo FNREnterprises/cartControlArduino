@@ -125,7 +125,7 @@ int moves[11][4]{
 
 
 
-void setupFahren() {
+void setupDriving() {
 
 	Serial.println(F("initialize cart wheel motor control"));			// Adafruit Motor Shield
 	AFMS.begin();
@@ -783,6 +783,7 @@ void handleMove(bool newSensorValuesAvailable) {
 			// send update for final yaw
 			Serial.print("!P2,");
 			Serial.print(int(platformImu.getYaw()));
+			Serial.println();
 
 			return;
 		}

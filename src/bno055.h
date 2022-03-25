@@ -9,7 +9,7 @@
 class Imu {
 
 public:
-	bool setAddressAndName(byte thisAddress, String thisName, String thisId);
+	bool setAddressAndName(byte thisAddress, String thisName, String thisId, bool yawInverted);
 	bool changedBnoSensorData();
 	float getYaw();
 	float getRoll();
@@ -31,6 +31,7 @@ private:
 	float prevYaw;
 	float prevRoll;
 	float prevPitch;
+	bool yawInverted;
 	unsigned long millisLastPublished;
 };
 
